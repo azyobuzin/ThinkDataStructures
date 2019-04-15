@@ -22,7 +22,9 @@ public class ListClientExampleTest {
 		ListClientExample lce = new ListClientExample();
 		@SuppressWarnings("rawtypes")
 		List list = lce.getList();
-		assertThat(list, instanceOf(ArrayList.class) );
+		// hamcrest を使ったアサーション（instanceOf）
+		// assertThat + hamcrest でいろんな条件を作れる
+		assertThat(list, instanceOf(ArrayList.class));
 	}
 
 }

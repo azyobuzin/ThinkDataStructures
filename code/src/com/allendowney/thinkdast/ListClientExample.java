@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListClientExample {
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes") // 型引数省略警告を無視
 	private List list;
 
 	@SuppressWarnings("rawtypes")
