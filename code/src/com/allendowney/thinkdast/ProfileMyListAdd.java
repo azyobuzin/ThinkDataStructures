@@ -1,14 +1,12 @@
 package com.allendowney.thinkdast;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.jfree.data.xy.XYSeries;
 
 import com.allendowney.thinkdast.Profiler.Timeable;
 
-public class ProfileListAdd {
+public class ProfileMyListAdd {
 	
 	/**
 	 * @param args
@@ -32,7 +30,7 @@ public class ProfileListAdd {
 			List<String> list;
 
 			public void setup(int n) {
-				list = new ArrayList<>();
+				list = new MyArrayList<>();
 			}
 
 			public void timeMe(int n) {
@@ -43,7 +41,7 @@ public class ProfileListAdd {
 		};
 		int startN = 4000;
 		int endMillis = 1000;
-		runProfiler("ArrayList add end", timeable, startN, endMillis);
+		runProfiler("MyArrayList add end", timeable, startN, endMillis);
 	}
 	
 	/**
@@ -54,7 +52,7 @@ public class ProfileListAdd {
 			List<String> list;
 
 			public void setup(int n) {
-				list = new ArrayList<>();
+				list = new MyArrayList<>();
 			}
 
 			public void timeMe(int n) {
@@ -66,7 +64,7 @@ public class ProfileListAdd {
 
 		int startN = 4000;
 		int endMillis = 1000;
-		runProfiler("ArrayList add beginning", timeable, startN, endMillis);
+		runProfiler("MyArrayList add beginning", timeable, startN, endMillis);
 	}
 
 	/**
@@ -77,7 +75,7 @@ public class ProfileListAdd {
 			List<String> list;
 
 			public void setup(int n) {
-				list = new LinkedList<>();
+				list = new MyLinkedList<>();
 			}
 
 			public void timeMe(int n) {
@@ -89,7 +87,7 @@ public class ProfileListAdd {
 
 		int startN = 4000;
 		int endMillis = 1000;
-		runProfiler("LinkedList add beginning", timeable, startN, endMillis);
+		runProfiler("MyLinkedList add beginning", timeable, startN, endMillis);
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class ProfileListAdd {
 			List<String> list;
 
 			public void setup(int n) {
-				list = new LinkedList<>();
+				list = new MyLinkedList<>();
 			}
 
 			public void timeMe(int n) {
@@ -112,7 +110,7 @@ public class ProfileListAdd {
 
 		int startN = 4000;
 		int endMillis = 1000;
-		runProfiler("LinkedList add end", timeable, startN, endMillis);
+		runProfiler("MyLinkedList add end", timeable, startN, endMillis);
 	}
 
 	/**

@@ -30,7 +30,7 @@ public class MyLinkedList<E> implements List<E> {
 			this.data = data;
 			this.next = null;
 		}
-		@SuppressWarnings("unused")
+
 		public Node(E data, Node next) {
 			this.data = data;
 			this.next = next;
@@ -82,7 +82,17 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public void add(int index, E element) {
-		//TODO: FILL THIS IN!
+		if (index == 0) {
+			// 先頭
+			head = new Node(element, head);
+		} else {
+			// 先頭以外なら index - 1 が使える
+			Node prevNode = getNode(index - 1);
+			Node nextNode = prevNode.next;
+			Node newNode = new Node(element, nextNode);
+			prevNode.next = newNode;
+		}
+		size++;
 	}
 
 	@Override
@@ -143,7 +153,11 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		//TODO: FILL THIS IN!
+		Node node = head;
+		int index = 0;
+		for (; node != null; node = node.next, index++) {
+			if (equals(target, node.data)) return index;
+		}
 		return -1;
 	}
 
@@ -208,8 +222,22 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public E remove(int index) {
-		//TODO: FILL THIS IN!
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		E old;
+		if (index == 0) {
+			old = head.data;
+			head = head.next;
+		} else {
+			Node prevNode = getNode(index - 1);
+			Node currentNode = prevNode.next;
+			old = currentNode.data;
+			prevNode.next = currentNode.next;
+		}
+		size--;
+		return old;
 	}
 
 	@Override
