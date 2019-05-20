@@ -12,4 +12,6 @@
 hs_err_pid*
 
 /code/junit
+/code/bin
 /solutions/junit
+/solutions/bin

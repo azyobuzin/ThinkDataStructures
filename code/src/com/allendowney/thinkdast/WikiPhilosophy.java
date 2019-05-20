@@ -40,6 +40,9 @@ public class WikiPhilosophy {
      * @throws IOException
      */
     public static void testConjecture(String destination, String source, int limit) throws IOException {
-        // TODO: FILL THIS IN!
+        Elements paragraphs = wf.fetchWikipedia(source);
+
+        // 動作確認
+        for (Element p : paragraphs) System.out.println(p);
     }
 }
