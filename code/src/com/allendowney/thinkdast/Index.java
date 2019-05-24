@@ -79,11 +79,14 @@ public class Index {
      * @param paragraphs  Collection of elements that should be indexed.
      */
     public void indexPage(String url, Elements paragraphs) {
-        // TODO: Your code here
+        // TermCounter を作成し、 paragraphs に含まれる単語をカウントせよ
+        TermCounter termCounter = new TermCounter(url);
+        termCounter.processElements(paragraphs);
 
-        // make a TermCounter and count the terms in the paragraphs
-
-        // for each term in the TermCounter, add the TermCounter to the index
+        // TermCounter 内のすべての単語について、索引に TermCounter を追加せよ
+        for (String term : termCounter.keySet()) {
+            add(term, termCounter);
+        }
     }
 
     /**
