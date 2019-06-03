@@ -71,7 +71,13 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 		@SuppressWarnings("unchecked")
 		Comparable<? super K> k = (Comparable<? super K>) target;
 
-		// TODO: FILL THIS IN!
+		Node node = root;
+		while (node != null) {
+			int cmp = k.compareTo(node.key);
+			if (cmp < 0) node = node.left;
+			else if (cmp > 0) node = node.right;
+			else return node;
+		}
 		return null;
 	}
 
@@ -95,8 +101,10 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private boolean containsValueHelper(Node node, Object target) {
-		// TODO: FILL THIS IN!
-		return false;
+		if (node == null) return false;
+		if (equals(node.value, target)) return true;
+		return containsValueHelper(node.left, target)
+			|| containsValueHelper(node.right, target);
 	}
 
 	@Override
@@ -121,8 +129,15 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	@Override
 	public Set<K> keySet() {
 		Set<K> set = new LinkedHashSet<K>();
-		// TODO: FILL THIS IN!
+		keySetHelper(root, set);
 		return set;
+	}
+
+	private void keySetHelper(Node node, Set<K> set) {
+		if (node == null) return;
+		keySetHelper(node.left, set);
+		set.add(node.key);
+		keySetHelper(node.right, set);
 	}
 
 	@Override
@@ -139,8 +154,35 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private V putHelper(Node node, K key, V value) {
-		// TODO: FILL THIS IN!
-		return null;
+		@SuppressWarnings("unchecked")
+		int cmp = ((Comparable<? super K>)key).compareTo(node.key);
+
+		if (cmp < 0) {
+			if (node.left == null) {
+				// 左側に追加
+				node.left = new Node(key, value);
+				size++;
+				return null;
+			}
+
+			// もっと左下のノードを探しに行く
+			return putHelper(node.left, key, value);
+		} else if (cmp > 0) {
+			if (node.right == null) {
+				// 右側に挿入
+				node.right = new Node(key, value);
+				size++;
+				return null;
+			}
+
+			// もっと右下のノードを探しに行く
+			return putHelper(node.right, key, value);
+		}
+
+		// 一致するので置き換え
+		V oldValue = node.value;
+		node.value = value;
+		return oldValue;
 	}
 
 	@Override
