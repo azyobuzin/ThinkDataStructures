@@ -102,8 +102,8 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 
 	private boolean containsValueHelper(Node node, Object target) {
 		if (node == null) return false;
-		if (equals(node.value, target)) return true;
-		return containsValueHelper(node.left, target)
+		return equals(node.value, target)
+			|| containsValueHelper(node.left, target)
 			|| containsValueHelper(node.right, target);
 	}
 

@@ -123,6 +123,11 @@
             <classpath refid="JavaCS.classpath"/>
         </junit>
     </target>
+    <target name="JedisTest">
+        <java classname="JedisTest" failonerror="true" fork="yes">
+            <classpath refid="JavaCS.classpath"/>
+        </java>
+    </target>
     <target name="JedisMaker">
         <java classname="com.allendowney.thinkdast.JedisMaker" failonerror="true" fork="yes">
             <classpath refid="JavaCS.classpath"/>

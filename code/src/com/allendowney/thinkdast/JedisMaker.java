@@ -67,16 +67,20 @@ public class JedisMaker {
 		// connect to the server
 		Jedis jedis = new Jedis(host, port);
 
-		try {
-			jedis.auth(auth);
-		} catch (Exception e) {
-			System.out.println("Trying to connect to " + host);
-			System.out.println("on port " + port);
-			System.out.println("with authcode " + auth);
-			System.out.println("Got exception " + e);
-			printInstructions();
-			return null;
+		String userInfo = uri.getUserInfo();
+		if (userInfo != null && userInfo.length() > 0) {
+			try {
+				jedis.auth(auth);
+			} catch (Exception e) {
+				System.out.println("Trying to connect to " + host);
+				System.out.println("on port " + port);
+				System.out.println("with authcode " + auth);
+				System.out.println("Got exception " + e);
+				printInstructions();
+				return null;
+			}
 		}
+
 		return jedis;
 	}
 

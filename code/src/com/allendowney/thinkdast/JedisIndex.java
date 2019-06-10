@@ -77,8 +77,8 @@ public class JedisIndex {
 	 * @return Set of URLs.
 	 */
 	public Set<String> getURLs(String term) {
-        // FILL THIS IN!
-		return null;
+		String redisKey = urlSetKey(term);
+		return jedis.smembers(redisKey);
 	}
 
     /**
@@ -88,8 +88,11 @@ public class JedisIndex {
 	 * @return Map from URL to count.
 	 */
 	public Map<String, Integer> getCounts(String term) {
-        // FILL THIS IN!
-		return null;
+		Set<String> urls = getURLs(term);
+		Map<String, Integer> results = new HashMap<>();
+		for (String url : urls)
+			results.put(url, getCount(url, term));
+        return results;
 	}
 
     /**
@@ -100,8 +103,8 @@ public class JedisIndex {
 	 * @return
 	 */
 	public Integer getCount(String url, String term) {
-        // FILL THIS IN!
-		return null;
+		return Integer.valueOf(
+			jedis.hget(termCounterKey(url), term));
 	}
 
 	/**
@@ -111,7 +114,18 @@ public class JedisIndex {
 	 * @param paragraphs  Collection of elements that should be indexed.
 	 */
 	public void indexPage(String url, Elements paragraphs) {
-		// TODO: FILL THIS IN!
+		TermCounter termCounter = new TermCounter(url);
+		termCounter.processElements(paragraphs);
+
+		String tcKey = termCounterKey(url);
+
+		for (String term : termCounter.keySet()) {
+			// 単語から TermCounter を引けるようにする
+			add(term, termCounter);
+
+			// URL から TermCounter を引けるようにする
+			jedis.hset(tcKey, term, termCounter.get(term).toString());
+		}
 	}
 
 	/**
