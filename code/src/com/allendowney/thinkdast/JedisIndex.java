@@ -119,6 +119,9 @@ public class JedisIndex {
 
 		String tcKey = termCounterKey(url);
 
+		// TermCounter を作り直すので、前回のがあれば消す
+		jedis.del(tcKey);
+
 		for (String term : termCounter.keySet()) {
 			// 単語から TermCounter を引けるようにする
 			add(term, termCounter);

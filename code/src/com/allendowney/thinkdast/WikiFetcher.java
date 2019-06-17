@@ -54,7 +54,7 @@ public class WikiFetcher {
 
 		// read the file
 		InputStream stream = WikiFetcher.class.getClassLoader().getResourceAsStream(filename);
-		Document doc = Jsoup.parse(stream, "UTF-8", filename);
+		Document doc = Jsoup.parse(stream, "UTF-8", url);
 
 		// parse the contents of the file
 		Element content = doc.getElementById("mw-content-text");

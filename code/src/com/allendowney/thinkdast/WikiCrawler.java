@@ -55,10 +55,33 @@ public class WikiCrawler {
 	 * @throws IOException
 	 */
 	public String crawl(boolean testing) throws IOException {
-		// TODO: FILL THIS IN!
-        return null;
+		String url = queue.poll();
+
+		// キューが空なのでなにもしない
+		if (url == null) return null;
+
+		// インデックス済みならなにもしない
+		if (!testing && index.isIndexed(url)) {
+			System.out.println("Already crawled: " + url);
+			return null;
+		}
+
+		System.out.println("Crawling: " + url);
+
+		Elements paragraphs = testing
+			? wf.readWikipedia(url)
+			: wf.fetchWikipedia(url);
+
+		// インデックス
+		index.indexPage(url, paragraphs);
+
+		// リンクをキューに積む
+		queueInternalLinks(paragraphs);
+
+		return url;
 	}
 
+	// queueInternalLinks は本文より（課題は crawl だけなので）
 	/**
 	 * Parses paragraphs and adds internal links to the queue.
 	 * 
@@ -66,7 +89,27 @@ public class WikiCrawler {
 	 */
 	// NOTE: absence of access level modifier means package-level
 	void queueInternalLinks(Elements paragraphs) {
-        // TODO: FILL THIS IN!
+		for (Element paragraph: paragraphs) {
+			queueInternalLinks(paragraph);
+		}
+	}
+
+	/**
+	 * Parses a paragraph and adds internal links to the queue.
+	 * 
+	 * @param paragraph
+	 */
+	private void queueInternalLinks(Element paragraph) {
+		Elements elts = paragraph.select("a[href]");
+		for (Element elt: elts) {
+			String relURL = elt.attr("href");
+			
+			if (relURL.startsWith("/wiki/")) {
+				String absURL = elt.attr("abs:href");
+				//System.out.println(absURL);
+				queue.offer(absURL);
+			}
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -82,12 +125,10 @@ public class WikiCrawler {
 
 		// loop until we index a new page
 		String res;
-		do {
+		for (int i = 0; i < 10; i++) {
 			res = wc.crawl(false);
-
-            // REMOVE THIS BREAK STATEMENT WHEN crawl() IS WORKING
-            break;
-		} while (res == null);
+			if (res == null) break;
+		}
 		
 		Map<String, Integer> map = index.getCounts("the");
 		for (Entry<String, Integer> entry: map.entrySet()) {
