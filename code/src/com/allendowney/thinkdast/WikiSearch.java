@@ -1,6 +1,7 @@
 package com.allendowney.thinkdast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -60,8 +61,11 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch or(WikiSearch that) {
-		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> newMap = new HashMap<>(map);
+		for (String thatKey : that.map.keySet()) {
+			newMap.put(thatKey, totalRelevance(getRelevance(thatKey), that.getRelevance(thatKey)));
+		}
+		return new WikiSearch(newMap);
 	}
 
 	/**
@@ -71,8 +75,13 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch and(WikiSearch that) {
-		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> newMap = new HashMap<>();
+		for (String url : map.keySet()) {
+			if (that.map.containsKey(url)) {
+				newMap.put(url, totalRelevance(getRelevance(url), that.getRelevance(url)));
+			}
+		}
+		return new WikiSearch(newMap);
 	}
 
 	/**
@@ -82,8 +91,11 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch minus(WikiSearch that) {
-		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> newMap = new HashMap<>(map);
+		for (String removeUrl : that.map.keySet()) {
+			newMap.remove(removeUrl);
+		}
+		return new WikiSearch(newMap);
 	}
 
 	/**
@@ -104,8 +116,14 @@ public class WikiSearch {
 	 * @return List of entries with URL and relevance.
 	 */
 	public List<Entry<String, Integer>> sort() {
-		// TODO: FILL THIS IN!
-		return null;
+		List<Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
+		Collections.sort(list, new Comparator<Entry<String, Integer>>() {
+			@Override
+			public int compare(Entry<String, Integer> x, Entry<String, Integer> y) {
+				return Integer.compare(getRelevance(x.getKey()), getRelevance(y.getKey()));
+			}
+		});
+		return list;
 	}
 
 
